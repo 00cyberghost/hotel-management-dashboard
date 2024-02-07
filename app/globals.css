@@ -2,6 +2,8 @@
 @import '/assets/vendor/chartist/css/chartist.min.css';
 @import '/assets/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css';
 @import '/assets/vendor/jquery-nice-select/css/nice-select.css';
+@import '/assets/vendor/dropzone/dist/dropzone.css';
+@import '/assets/vendor/sweetalert2/dist/sweetalert2.min.css';
 @import '/assets/css/style.css';
 /* @tailwind base;
 @tailwind components;

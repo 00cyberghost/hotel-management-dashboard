@@ -1,6 +1,47 @@
-import Link from "next/link"
+"use client"
+import Link from 'next/link'
+import InputError from '@/app/components/InputError/InputError'
+import { useAuth } from '@/app/hooks/auth'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import AuthSessionStatus from '@/app/(pages)/(auth)/AuthSessionStatus'
+//import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
 
 export default function Login() {
+
+    const router = useRouter()
+
+    const { login } = useAuth({
+        middleware: 'guest',
+        redirectIfAuthenticated: '/admin',
+    })
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [shouldRemember, setShouldRemember] = useState(false)
+    const [errors, setErrors] = useState([])
+    const [status, setStatus] = useState(null)
+
+    useEffect(() => {
+        if (router.reset?.length > 0 && errors.length === 0) {
+            setStatus(atob(router.reset))
+        } else {
+            setStatus(null)
+        }
+    })
+
+    const submitForm = async event => {
+        event.preventDefault()
+
+        login({
+            email,
+            password,
+            remember: shouldRemember,
+            setErrors,
+            setStatus,
+        })
+    }
+
   return (
     
     <div className="authincation h-100">
@@ -13,29 +54,44 @@ export default function Login() {
                                 <div className="auth-form">
 									<div className="text-center mb-3">
                                         <Link href="/">
-                                            <img  className="light-login" src="public/assets/images/logo-white.png" alt="" />
+                                            <img  className="light-login" src="/assets/images/logo-white.png" alt="" />
 
                                         </Link>
 										<Link href="/">
-                                            <img  className="dark-login" src="public/assets/images/logo-dark.png" alt="" />
+                                            <img  className="dark-login" src="/assets/images/logo-dark.png" alt="" />
 
                                         </Link>
 									</div>
                                     <h4 className="text-center mb-4">Sign in your account</h4>
-                                    <form action="https://innap.dexignzone.com/codeigniter/demo/index">
+                                    <AuthSessionStatus className="mb-4" status={status} />
+                                    <form onSubmit={submitForm}>
+                                       
                                         <div className="mb-3">
                                             <label className="mb-1"><strong>Email</strong></label>
-                                            <input type="email" className="form-control" placeholder="ozorclinton@gmail.com" />
+                                            <input type="email" 
+                                                value={email} 
+                                                onChange={event => setEmail(event.target.value)} 
+                                                className="form-control" 
+                                                placeholder="ozorclinton@gmail.com" />
+
+                                                <span className='text-danger'>{errors.email}</span>
+
+                                            
                                         </div>
                                         <div className="mb-3 position-relative">
                                             <label className="mb-1"><strong>Password</strong></label>
-											<input type="password" id="dz-password" className="form-control" />
+											<input type="password" 
+                                                id="dz-password" 
+                                                value={password}
+                                                onChange={event => setPassword(event.target.value)} 
+                                                className="form-control" required />
 											<span className="show-pass eye">
 											
 												<i className="fa fa-eye-slash"></i>
 												<i className="fa fa-eye"></i>
 											
 											</span>
+                                            <span className='text-danger'>{errors.password}</span>
                                         </div>
                                         
                                         <div className="text-center">

@@ -1,6 +1,15 @@
 import Link from "next/link"
+import { useAuth } from '@/app/hooks/auth'
+import { useEffect } from "react"
 
 export default function Admin() {
+
+    useEffect(() => {
+
+        setTimeout(() => loadMenus(),1000)
+    },[])
+
+    const { logout } = useAuth()
   return (
     
            
@@ -8,11 +17,11 @@ export default function Admin() {
            <div className="deznav">
            <div className="deznav-scroll">
                <ul className="metismenu" id="menu">
-                   <li><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                   <li><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                            <i className="flaticon-025-dashboard"></i>
                            <span className="nav-text">Dashboard</span>
                        </a>
-                       <ul aria-expanded="false">
+                       <ul ariaExpanded="false">
                            <li><Link href="/admin">Dashboard Light</Link></li>
                        </ul>
 
@@ -23,22 +32,22 @@ export default function Admin() {
                            <span className="nav-text">BOOKINGS</span>
                        </Link>
                    </li>
-                   <li><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                   <li><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                        <i className="fas fa-house"></i>
                            <span className="nav-text">ROOMS</span>
                        </a>
-                       <ul aria-expanded="false">
+                       <ul ariaExpanded="false">
                            <li><Link href="/admin/add_room">ADD ROOM</Link></li>
                            <li><Link href="/admin/room_list">ROOM LIST</Link></li>
                            
                            
                        </ul>
                    </li>
-                   <li><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                   <li><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                            <i className="fas fa-users"></i>
                            <span className="nav-text">STAFFS</span>
                        </a>
-                       <ul aria-expanded="false">
+                       <ul ariaExpanded="false">
                            <li><Link href="/admin/add_staff">ADD STAFF</Link></li>
                            <li><Link href="/admin/staff_list">STAFF LIST</Link></li>
                        </ul>
@@ -50,7 +59,7 @@ export default function Admin() {
                        </Link>
                    </li>
                    <li>
-                        <a className="ai-icon" href="javascript:void()" aria-expanded="false">
+                        <a onClick={logout} className="ai-icon" href="#" aria-expanded="false">
                            <i className="fas fa-power-off"></i>
                            <span className="nav-text">LOG OUT</span>
                        </a>

@@ -1,8 +1,41 @@
-import Link from "next/link"
+"use client"
+
+import Link from 'next/link'
+import { useAuth } from '@/app/hooks/auth'
+import { useState } from 'react'
+
+
 export default function Register() {
+
+    const { register } = useAuth({
+        middleware: 'guest',
+        redirectIfAuthenticated: '/dashboard',
+    })
+
+    const [name, setName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [passwordConfirmation, setPasswordConfirmation] = useState('')
+    const [errors, setErrors] = useState([])
+
+    const submitForm = event => {
+        event.preventDefault()
+
+        register({
+            name,
+            phone,
+            email,
+            password,
+            password_confirmation: passwordConfirmation,
+            setErrors,
+        })
+    }
+
+
     return (
       
-      <>
+    
   
   <div className="authincation h-100">
           <div className="container h-100">
@@ -12,37 +45,67 @@ export default function Register() {
                           <div className="row no-gutters">
                               <div className="col-xl-12">
                                   <div className="auth-form">
-                                      <div className="text-center mb-3">
-                                          <Link href="/">
-                                              <img className="light-login" src="public/assets/images/logo-white.png" alt="" />
-                                          </Link>
-                                          <Link href="/">
-                                              <img className="dark-login" src="public/assets/images/logo-dark.png" alt="" />
-                                          </Link>
-                                      </div>
+                                     
                                       <h4 className="text-center mb-4">Sign up your account</h4>
-                                      <form action="https://innap.dexignzone.com/codeigniter/demo/index">
+                                      <form onSubmit={submitForm}>
                                           <div className="mb-3">
                                               <label className="mb-1"><strong>Name</strong></label>
-                                              <input type="text" className="form-control" placeholder="ozor clinton" />
+                                              <input type="text" 
+                                                className="form-control" 
+                                                placeholder="ozor clinton"
+                                                value={name}
+                                                onChange={event => setName(event.target.value)}
+                                                required />
+                                                <span className='text-danger'>{errors.name}</span>
                                           </div>
                                           <div className="mb-3">
                                               <label className="mb-1"><strong>Phone</strong></label>
-                                              <input type="tel" className="form-control" placeholder="+123 456 7898" />
+                                              <input type="tel" 
+                                                className="form-control" 
+                                                placeholder="+123 456 7898"
+                                                value={phone}
+                                                onChange={event => setPhone(event.target.value)}
+                                                required />
+                                              <span className='text-danger'>{errors.phone}</span>
                                           </div>
+
                                           <div className="mb-3">
                                               <label className="mb-1"><strong>Email</strong></label>
-                                              <input type="email" className="form-control" placeholder="ozorclinton@gmail.com" />
+                                              <input type="email" 
+                                                className="form-control" 
+                                                placeholder="ozorclinton@gmail.com"
+                                                value={email}
+                                                onChange={event => setEmail(event.target.value)} />
+                                                <span className='text-danger'>{errors.email}</span>
                                           </div>
                                          <div className="mb-3 position-relative">
                                               <label className="mb-1"><strong>Password</strong></label>
-                                              <input type="password" id="dz-password" className="form-control" />
+                                              <input type="password" 
+                                                id="password" 
+                                                className="form-control"
+                                                value={password}
+                                                onChange={event => setPassword(event.target.value)} />
                                               <span className="show-pass eye">
                                               
                                                   <i className="fa fa-eye-slash"></i>
                                                   <i className="fa fa-eye"></i>
                                               
                                               </span>
+                                          </div>
+                                          <div className="mb-3 position-relative">
+                                              <label className="mb-1"><strong>Confirm Password</strong></label>
+                                              <input type="password" 
+                                                id="password" 
+                                                className="form-control"
+                                                value={passwordConfirmation}
+                                                onChange={event => setPasswordConfirmation(event.target.value)} />
+                                              <span className="show-pass eye">
+                                              
+                                                  <i className="fa fa-eye-slash"></i>
+                                                  <i className="fa fa-eye"></i>
+                                              
+                                              </span>
+                                              <span className='text-danger'>{errors.password_confirmation}</span>
                                           </div>
                                           <div className="text-center mt-4">
                                               <button type="submit" className="btn btn-primary btn-block">Sign me up</button>
@@ -61,7 +124,7 @@ export default function Register() {
       </div>
   
   
-      </>
+      
     )
   }
   

@@ -1,6 +1,6 @@
 
 
-(function($) {
+const initDashboardCharts = () => {
     /* "use strict" */
 	
  var dzChartlist = function(){
@@ -148,15 +148,22 @@
 	
 	}();
 
+	dzChartlist.load();
+
 	
 		
-	jQuery(window).on('load',function(){
-		setTimeout(function(){
-			dzChartlist.load();
-		}, 1000); 
+	// jQuery(window).on('load',function(){
+	// 	setTimeout(function(){
+	// 		dzChartlist.load();
+	// 	}, 1000); 
 		
-	});
+	// });
+
+	// const initDashboardCharts = () => {
+
+	// 	dzChartlist.load();
+	// }
 
      
 
-})(jQuery);
+}

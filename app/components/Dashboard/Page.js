@@ -1,4 +1,9 @@
+"use client"
+import { useEffect } from "react"
+
 export default function Dashboard() {
+
+  useEffect(() => initDashboardCharts(),[])
   return (
     
      // Content body start
