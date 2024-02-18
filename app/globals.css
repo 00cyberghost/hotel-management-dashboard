@@ -1,9 +1,12 @@
 @import '/node_modules/bootstrap/dist/css/bootstrap.css';
 @import '/assets/vendor/chartist/css/chartist.min.css';
 @import '/assets/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css';
+@import '/assets/vendor/pickadate/themes/default.css';
+@import '/assets/vendor/pickadate/themes/default.date.css';
 @import '/assets/vendor/jquery-nice-select/css/nice-select.css';
 @import '/assets/vendor/dropzone/dist/dropzone.css';
 @import '/assets/vendor/sweetalert2/dist/sweetalert2.min.css';
+@import '/assets/vendor/owl-carousel/owl.carousel.css';
 @import '/assets/css/style.css';
 /* @tailwind base;
 @tailwind components;

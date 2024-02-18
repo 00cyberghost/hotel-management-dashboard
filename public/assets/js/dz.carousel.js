@@ -1,7 +1,7 @@
 /* JavaScript Document */
 
 
-function carouselReview(){
+const carouselReview = () => {
 	jQuery('.gallery-carousel').owlCarousel({
 		nav:true,
 		margin:20,
@@ -17,9 +17,9 @@ function carouselReview(){
 }
 
 
-jQuery(window).on('load',function(){
-	setTimeout(function(){
-		carouselReview();
-	}, 1000); 
-});
+// jQuery(window).on('load',function(){
+// 	setTimeout(function(){
+// 		carouselReview();
+// 	}, 1000); 
+// });
 /* Document .ready END */
