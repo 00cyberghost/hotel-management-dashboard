@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { arrayToString } from "@/lib/utils"
+import { arrayToString, handleDate2 } from "@/lib/utils"
 import Loading from "@/components/Loading/Page"
 
 
@@ -94,8 +94,8 @@ export default function Roomtabs(props) {
                                 </td>
                                 <td>
                                     <div>
-                                        <span className="d-block text-success">{ room.status }</span>
-                                        <span className="fs-14">Oct 24th - 26th</span>
+                                        <span className="d-block text-info">{ room.status }</span>
+                                        <span className="fs-14">{ handleDate2(props.checkin) } - { handleDate2(props.checkout) }</span>
                                     </div>
                                 </td>
                                 <td id={room.id}>

@@ -10,7 +10,7 @@ export const useReception = () => {
     const router = useRouter()
     
     
-    /********* staffs **********/
+    /********* receptionist **********/
 
     //check room  availability
     const ReceptionCheckAvailability = (props) => {
@@ -37,6 +37,28 @@ export const useReception = () => {
         // })
     }
 
+    //get for unpaid rooms
+    const ReceptionUnpaidRooms = (props) => {
+
+        const { data:rooms2, error:error2, isLoading:isLoading2 } = useSWR('/reception/unpaid_rooms', (...args) =>
+        
+        axios.post(...args,props).then(res => res.data))
+
+        return {rooms2, isLoading2, error2}
+
+    }
+
+    //get for paid/reserved rooms
+    const ReceptionPaidRooms = (props) => {
+
+        const { data:rooms3, error:error3, isLoading:isLoading3 } = useSWR('/reception/paid_rooms', (...args) =>
+        
+        axios.post(...args,props).then(res => res.data))
+
+        return {rooms3, isLoading3, error3}
+
+    }
+
     //add booking
     const ReceptionAddBooking = async ({ setErrors, ...props }) => {
 
@@ -44,6 +66,9 @@ export const useReception = () => {
 
         axios.post('/reception/add_booking', props)
         .then((res) => {
+           
+            //close the modal
+            document.getElementById('bookingModalButton').click()
            router.push('/reception')
         })
         .catch(error => {
@@ -212,7 +237,9 @@ export const useReception = () => {
 
     return {
         ReceptionCheckAvailability,
-        ReceptionAddBooking
+        ReceptionAddBooking,
+        ReceptionUnpaidRooms,
+        ReceptionPaidRooms
     }
 
     

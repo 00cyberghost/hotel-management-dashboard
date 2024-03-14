@@ -4,16 +4,17 @@ import Confirm from "@/components/SweetAlert/Confirm"
 import Loading from "@/components/Loading/Page"
 import { useState,useContext,useEffect } from "react"
 import Link from "next/link"
-import { arrayToString,notifyInfo,openConfirmResponse,durationOfStay,openBookingModal } from "@/lib/utils"
+import { durationOfStay,handleDate2,notifyInfo2,openBookingModal } from "@/lib/utils"
 import { ReceptionContext } from "@/app/reception/layout"
 import Roomtabs from "@/components/Room/RoomTabs"
+
 
 
 export default function AvailableRooms() {
 
 
 
-    const { ReceptionCheckAvailability,ReceptionAddBooking } = useReception();
+    const { ReceptionCheckAvailability,ReceptionAddBooking,ReceptionUnpaidRooms,ReceptionPaidRooms } = useReception();
 
     const { bookingData } = useContext(ReceptionContext)
     
@@ -22,6 +23,10 @@ export default function AvailableRooms() {
     if(bookingData?.checkin == null || bookingData?.checkin == undefined) window.location = '/reception'
 
     const {rooms, isLoading, error} = ReceptionCheckAvailability(bookingData)
+
+    const {rooms2, isLoading2, error2} = ReceptionUnpaidRooms(bookingData)
+
+    const {rooms3, isLoading3, error3} = ReceptionPaidRooms(bookingData)
 
     //this will be used to toggle between tabs
     const [currentTab,setCurrentTab] = useState('available')
@@ -48,6 +53,8 @@ export default function AvailableRooms() {
 
     const [payment,setPayment] = useState(0)
 
+    const [status,setStatus] = useState(null)
+
     const [errors,setErrors] = useState([])
 
     //when the booking form is submitted
@@ -65,6 +72,7 @@ export default function AvailableRooms() {
             checkin_date,
             checkout_date,
             no_of_persons,
+            status,
             setErrors
         })
     }
@@ -117,21 +125,56 @@ export default function AvailableRooms() {
         
        }
     }
-
+    
+    //toggle between available rooms,pennding payment and reserved(paid) room tabs
+    //reset booking summary parameters by setting them to zero
     const toggleTabs = (event) => {
 
         const tab_name = event.target.getAttribute('data-name')
 
         setCurrentTab(tab_name)
-    }
-    
-    
 
-    
+        setRoom_id([])
+
+        setCapacity(0)
+
+        setPrice(0)
+
+        setTax(0)
+
+        setPayment(0)
+
+        switch (tab_name) {
+            case 'pending':
+                notifyInfo2('WARNING','These rooms has been booked but have not been paid for',true,5000,'top x-center')
+                break;
+
+            case 'reserved':
+                notifyInfo2('WARNING','These rooms has been booked and paid for and might be occupied',true,5000,'top x-center')
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    const toggleStatus = (event) => {
+
+        if(event.target.checked){
+
+            setStatus('yes')
+        
+        }else{
+
+            setStatus(null)
+        }
+    }
 
     useEffect(() => {
-        document.getElementById('no_of_persons').value = bookingData.capacity
-    },[bookingData])
+        
+        setTimeout(() => document.getElementById('no_of_persons').value = bookingData.capacity,4000)
+
+    },[bookingData,rooms])
     
 
     if(isLoading) return <Loading />
@@ -172,11 +215,11 @@ export default function AvailableRooms() {
                           <span href="javascript:void(0);" id="bookingModalButton" className="d-none btn btn-primary mb-xxl-0 mb-4 radius-btn" data-bs-toggle="modal" data-bs-target="#BookingModal"></span>
                       </div>
                       
-                      {currentTab == 'available' ? <Roomtabs rooms={rooms} isChecked={isChecked} /> : ''}
+                      {currentTab == 'available' ? <Roomtabs rooms={rooms} isChecked={isChecked} checkin={checkin_date} checkout={checkout_date} /> : ''}
 
-                      {currentTab == 'pending' ? <Roomtabs rooms={rooms} isChecked={isChecked} /> : ''}
+                      {currentTab == 'pending' ? <Roomtabs rooms={rooms2} isChecked={isChecked} checkin={checkin_date} checkout={checkout_date} /> : ''}
 
-                      {currentTab == 'reserved' ? <Roomtabs rooms={rooms} isChecked={isChecked} /> : ''}
+                      {currentTab == 'reserved' ? <Roomtabs rooms={rooms3} isChecked={isChecked} checkin={checkin_date} checkout={checkout_date} /> : ''}
                      
                       
                       
@@ -228,6 +271,12 @@ export default function AvailableRooms() {
                                         <span id="capacity_error" className="text-danger">{errors.no_of_persons}</span>
                                     </div>
                                 </div>
+                                <div className="col-md-12">
+                                    <div class="form-check custom-checkbox mb-1">
+                                        <input type="checkbox" onClick={toggleStatus} class="form-check-input" id="checkin" />
+                                        <label class="form-check-label" for="checkin">Check In Guest</label>
+                                    </div>
+                                </div>
                             </div>
                             <div className="row">
                                 <div className="mb-3">
@@ -243,7 +292,7 @@ export default function AvailableRooms() {
                         
                         <div className="mt-5">Total Number Of Room(s): <span className="text-right float-end">{ room_id.length }</span></div>
                         <hr />
-                        <div>Duration Of Stay: <span className="text-right float-end">{ durationOfStay(checkin_date,checkout_date) } days</span></div>
+                        <div>Duration Of Stay: <span className="text-right float-end">{ durationOfStay(checkin_date,checkout_date) } days ({ handleDate2(checkin_date) } - {handleDate2(checkout_date) })</span></div>
                         <hr />
                         <div>Total Room Capacity: <span className="text-right float-end">{ capacity }</span></div>
                         <hr />
